@@ -212,9 +212,18 @@ int main(int argc, char *argv[])
                 apriltag_detection_t *det;
                 zarray_get(detections, i, &det);
 
-                if (!quiet)
-                    printf("detection %3d: id (%2dx%2d)-%-4d, hamming %d, margin %8.3f\n",
-                           i, det->family->nbits, det->family->h, det->id, det->hamming, det->decision_margin);
+                if (!quiet) {
+                    printf("detection %3d: '%s', id (%2dx%2d)-%-4d, hamming %d, margin %8.3f center (%.0lf,%.0lf) corners [",
+                           i, path, det->family->nbits, det->family->h, det->id, det->hamming, det->decision_margin, det->c[0], det->c[1]);
+                    for(int cornx = 0; cornx < 4; cornx++) {
+                    	if(cornx > 0) {
+                    		printf(",");
+                    	}
+
+                    	printf("(%.0lf,%.0lf)", det->p[cornx][0], det->p[cornx][1]);
+                    }
+                    printf("]\n");
+				}
 
                 hamm_hist[det->hamming]++;
                 total_hamm_hist[det->hamming]++;
